@@ -1,15 +1,15 @@
 require_relative './automated_init'
 
 context "Example Context" do
-  test "Pass" do
+  test "Some passing test" do
     assert(true)
   end
 
-  test "Assertion failure" do
-    assert(false)
+  test "Some other passing test" do
+    assert(true)
   end
 
-  test "Error" do
-    fail "Some error"
+  test "Some failing test" do
+    assert(false)
   end
 end
