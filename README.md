@@ -12,7 +12,7 @@ Install this project's dependencies locally with `install-gems.sh`:
 
 Then, run an example test file to verify that you are able to see test output:
 
-![/doc/images/run-single-test-file.png][Run Single Test File With Ruby]
+![Run Single Test File With Ruby](doc/images/run-single-test-file.png)
 
 ## Documentation
 
