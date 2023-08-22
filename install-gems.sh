@@ -13,34 +13,41 @@ else
   posture=$POSTURE
 fi
 
-if [ -d gems ]; then
-  rm -rf gems
-
-  echo "Removed previously installed gems"
-  echo
-fi
+gem_dir="./gems"
 
 repo_name=$(basename $PWD)
-gem_name=$(basename -s .gemspec -a *.gemspec | grep ${repo_name//-/.} || true)
+gemspec=$(ls -A *.gemspec | grep ${repo_name//-/.} || true)
 
-if [ -z "$gem_name" ]; then
+if [ -z "$gemspec" ]; then
   echo "No gemspec found: ${repo_name//-/*}.gemspec"
   exit 1
 fi
 
-echo "Gemspec: $gem_name.gemspsec"
-
 gem_info=($(
-  gem build $gem_name.gemspec --output install-gems.gem --quiet 2>/dev/null |
+  gem build $gemspec --output install-gems.gem --quiet 2>/dev/null |
     sed -E -n 's/^[[:blank:]]*(Name|Version):[[:blank:]]*(.*)$/\2/p'
 ))
-gem="${gem_info[0]}-${gem_info[1]}"
-echo "Gem: $gem"
+gem_name=${gem_info[0]}
+gem="$gem_name-${gem_info[1]}"
 
-install_dir="gems/ruby/$(ruby -rrbconfig -e "puts RbConfig::CONFIG['ruby_version']")"
-echo "Install Dir: $install_dir"
+install_dir="$gem_dir/ruby/$(ruby -rrbconfig -e "puts RbConfig::CONFIG['ruby_version']")"
+
+echo "Posture: $posture"
+echo "Gem Directory: $gem_dir"
+echo "Gemspec: $gemspec"
 
 echo
+echo "Removing installed gems"
+echo "- - -"
+
+cmd="rm -rf $gem_dir"
+
+echo $cmd
+($cmd)
+
+echo
+echo "Installing gems"
+echo "- - -"
 
 gem_args="--install-dir $install_dir --bindir ./gems/bin --no-user-install"
 
@@ -92,7 +99,7 @@ load File.expand_path('#{File.join('..', executable_path)}', __dir__)
 
         File.chmod(0755, executable.path)
 
-        puts "Wrote executable: #{executable.path}"
+        puts "Wrote executable: #{executable.path} (#{spec.name})"
       end
     end
   end

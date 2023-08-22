@@ -1,6 +1,5 @@
 /*.gem
 /gems
-/Gemfile.lock
 /scratch*
 /.bundle
 /lib/test_bench/bootstrap.rb
